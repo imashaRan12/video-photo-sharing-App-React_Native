@@ -40,7 +40,7 @@ export default function RootLayout() {
           </View>
         </ScrollView>
 
-        <StatusBar backgroundColor="#161622" style="light" />
+        <StatusBar style="light" />
       </SafeAreaView>
     </LinearGradient>
   );

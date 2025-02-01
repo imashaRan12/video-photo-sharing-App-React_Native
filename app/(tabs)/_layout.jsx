@@ -33,7 +33,8 @@ const TabsLayout = () => {
           tabBarStyle: {
             backgroundColor: "rgba(22, 22, 34, 0.6)",
             backdropFilter: "blur(10px)",
-            height: 88,
+            height: 85,
+            borderColor: "rgba(22, 22, 34, 0.6)",
           },
         }}
       >
