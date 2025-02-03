@@ -7,26 +7,34 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const submit = async () => {
-    if (form.username || form.email || form.password) {
+    if (form.username === "" || form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all the fields!");
     }
 
     setIsSubmitting(true);
     try {
-      const result = await createUser(form.email, form.password, form.username);
-      setUser(result);
-      setIsLogged(true);
+      // const result = await createUser(form.email, form.password, form.username);
+      // setUser(result);
+      const { newUser } = await createUser(
+        form.email,
+        form.password,
+        form.username
+      );
+      setUser(newUser); // Store only user data
+      setIsLoggedIn(true);
 
       router.replace("/home");
     } catch (error) {
@@ -40,7 +48,7 @@ const SignUp = () => {
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
         <ScrollView>
-          <View className="w-full justify-center min-h-[80vh] px-4 my-2">
+          <View className="w-full h-full justify-center px-4 my-2">
             <Image
               source={images.logo}
               resizeMode="contain"

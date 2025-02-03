@@ -8,14 +8,21 @@ import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
-import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
+import {
+  getAllPosts,
+  getLatestPosts,
+  getAllPhotoPosts,
+} from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
+import PhotoCard from "../../components/PhotoCard";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
-
+  const { data: photos } = useAppwrite(getAllPhotoPosts);
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -24,14 +31,15 @@ const Home = () => {
     setRefreshing(false);
   };
 
-  console.log(posts);
   return (
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
         <FlatList
-          data={posts}
+          data={[...(posts || []), ...(photos || [])]}
           keyExtractor={(item) => item.$id}
-          renderItem={({ item }) => <VideoCard video={item} />}
+          renderItem={({ item }) =>
+            item.video ? <VideoCard video={item} /> : <PhotoCard photo={item} />
+          }
           ListHeaderComponent={() => (
             <View className="my-6 px-4 space-y-6">
               <View className="justify-between items-start flex-row mb-6">
@@ -48,7 +56,7 @@ const Home = () => {
                     Welcome Back
                   </Text>
                   <Text className="font-psemibold text-2xl text-white">
-                    Imasha
+                    {user?.username}
                   </Text>
                 </View>
               </View>
@@ -59,7 +67,6 @@ const Home = () => {
                 <Text className="text-gray-100 text-lg font-pregular mb-3">
                   Latest Videos
                 </Text>
-
                 <Trending posts={latestPosts ?? []} />
               </View>
             </View>

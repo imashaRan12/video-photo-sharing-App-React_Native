@@ -1,6 +1,6 @@
 import { View, Text, Image } from "react-native";
 import { Tabs, Redirect } from "expo-router";
-
+import { BlurView } from "expo-blur";
 import { icons } from "../../constants";
 
 const TabIcon = ({ icon, color, name, focused }) => {
@@ -28,14 +28,25 @@ const TabsLayout = () => {
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "#7851A9",
+          tabBarActiveTintColor: "#601EF9",
           tabBarInactiveTintColor: "#FFFFFF",
           tabBarStyle: {
-            backgroundColor: "rgba(22, 22, 34, 0.6)",
-            backdropFilter: "blur(10px)",
-            height: 85,
-            borderColor: "rgba(22, 22, 34, 0.6)",
+            position: "absolute",
+            left: 20,
+            right: 20,
+            height: 80,
+            overflow: "hidden", // Ensures BlurView is applied correctly
+            backgroundColor: "transparent", // Remove any solid background
+            borderTopWidth: 0, // Removes the white border at the top
+            elevation: 0, // Removes shadow on Android
+            shadowOpacity: 0, // Removes shadow on iOS
           },
+          tabBarBackground: () => (
+            <BlurView
+              intensity={30}
+              style={{ flex: 1, backgroundColor: "rgba(22, 22, 34, 0.5)" }}
+            />
+          ),
         }}
       >
         <Tabs.Screen
