@@ -13,6 +13,9 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import email from "../assets/icons/email.png";
 import img from "../assets/icons/img.png";
+import del from "../assets/icons/delete.png";
+import settings from "../assets/icons/settings.png";
+import like from "../assets/icons/heart.png";
 
 export default {
   play,
@@ -30,4 +33,7 @@ export default {
   eye,
   email,
   img,
+  del,
+  settings,
+  like,
 };

@@ -22,7 +22,14 @@ import { router } from "expo-router";
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
-  const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+  const { data: posts, refetch } = useAppwrite(() => getUserPosts(user.$id));
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const logout = async () => {
     Alert.alert(
@@ -53,7 +60,11 @@ const Profile = () => {
           data={posts}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) =>
-            item.video ? <VideoCard video={item} /> : <PhotoCard photo={item} />
+            item.video ? (
+              <VideoCard video={item} onDelete={refetch} user={user} />
+            ) : (
+              <PhotoCard photo={item} onDelete={refetch} user={user} />
+            )
           }
           ListHeaderComponent={() => (
             <View className="w-full justify-center items-center mt-6 mb-12 px-4">
@@ -104,7 +115,11 @@ const Profile = () => {
               subtitle="No videos and photos found for this search query "
             />
           )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
+
         <StatusBar style="light" />
       </SafeAreaView>
     </LinearGradient>

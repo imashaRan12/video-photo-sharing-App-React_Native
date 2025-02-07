@@ -19,9 +19,7 @@ import PhotoCard from "../../components/PhotoCard";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
-  const { data: posts, refetch: refetchPosts } = useAppwrite(() =>
-    getAllPosts(5)
-  );
+  const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
   const { data: latestPosts, refetch: refetchLatestPosts } =
     useAppwrite(getLatestPosts);
   const { data: photos, refetch: refetchPhotos } =

@@ -1,21 +1,44 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import React from "react";
-import { deletePost } from "../lib/appwrite";
+import { deletePhoto } from "../lib/appwrite";
 import { icons } from "../constants";
 
 const PhotoCard = ({
-  photo: {
-    title,
-    photo,
-    creator: { username, avatar },
-  },
+  photo: { $id, title, photo, creator },
+  user,
+  onDelete,
 }) => {
+  // Handle delete confirmation
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Confirmation",
+      "Are you sure you want to delete this video?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            const success = await deletePhoto($id, photo);
+            if (success) {
+              Alert.alert("Success", "Post Delete!");
+              onDelete?.(); // Call refetch function
+            }
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-start">
         <View className="w-[46px] h-[46px] rounded-full border border-secondary justify-center items-center p-0.5">
           <Image
-            source={{ uri: avatar }}
+            source={{ uri: creator.avatar }}
             className="w-full h-full rounded-full"
             resizeMode="cover"
           />
@@ -25,22 +48,34 @@ const PhotoCard = ({
             className="text-xs text-gray-100 font-pregular"
             numberOfLines={1}
           >
-            {username}
+            {creator.username}
           </Text>
           <Text className="text-white font-psemibold text-sm" numberOfLines={1}>
             {title}
           </Text>
         </View>
 
-        <View className="pt-2">
-          <TouchableOpacity>
+        {/* <View className="pt-2">
+          <TouchableOpacity onPress={handleDelete}>
             <Image
-              source={icons.menu}
-              className="w-5 h-5"
+              source={icons.del}
+              className="w-6 h-6"
               resizeMode="contain"
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
+        {/* Show delete button only if the logged-in user is the creator */}
+        {user?.$id === creator?.$id && (
+          <View className="pt-2">
+            <TouchableOpacity onPress={handleDelete}>
+              <Image
+                source={icons.del}
+                className="w-6 h-6"
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <Image
