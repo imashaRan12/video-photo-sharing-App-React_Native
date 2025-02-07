@@ -1,5 +1,12 @@
-import { View, FlatList, Image, TouchableOpacity, Alert } from "react-native";
-import React from "react";
+import {
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Alert,
+  RefreshControl,
+} from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
@@ -39,7 +46,6 @@ const Profile = () => {
       { cancelable: false }
     );
   };
-
   return (
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">

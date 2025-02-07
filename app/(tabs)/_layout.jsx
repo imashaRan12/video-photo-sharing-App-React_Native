@@ -34,7 +34,7 @@ const TabsLayout = () => {
             position: "absolute",
             left: 20,
             right: 20,
-            height: 80,
+            height: 85,
             overflow: "hidden", // Ensures BlurView is applied correctly
             backgroundColor: "transparent", // Remove any solid background
             borderTopWidth: 0, // Removes the white border at the top
@@ -73,7 +73,22 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.plus}
                 color={color}
-                name="Create"
+                name="Video"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="createPic"
+          options={{
+            title: "CreatePic",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.img}
+                color={color}
+                name="Photos"
                 focused={focused}
               />
             ),

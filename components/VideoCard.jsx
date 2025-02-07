@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { icons } from "../constants";
-import { Video, ResizeMode } from "expo-av";
+import { useVideoPlayer, VideoView } from "expo-video";
 const VideoCard = ({
   video: {
     title,
@@ -11,6 +11,11 @@ const VideoCard = ({
   },
 }) => {
   const [play, setPlay] = useState(false);
+  const player = useVideoPlayer(video, (player) => {
+    player.loop = false;
+    player.staysActiveInBackground = true;
+    player.onEnd = () => setPlay(false);
+  });
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-star">
@@ -40,22 +45,30 @@ const VideoCard = ({
         </View>
 
         <View className="pt-2">
-          <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
+          <TouchableOpacity>
+            <Image
+              source={icons.menu}
+              className="w-5 h-5"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
       {play ? (
-        <Video
-          source={{ uri: video }}
-          className="w-full h-60 rounded-xl mt-3"
-          resizeMode={ResizeMode.CONTAIN}
-          useNativeControls
-          shouldPlay
-          onPlaybackStatusUpdate={(status) => {
-            if (status.didJustFinish) {
-              setPlay(false);
-            }
+        <VideoView
+          player={player}
+          style={{
+            width: "100%",
+            height: 215,
+            borderRadius: 15,
+            marginTop: 12, // Equivalent to mt-3
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
           }}
+          contentFit="cover"
+          allowsFullscreen
+          allowsPictureInPicture
+          startsPictureInPictureAutomatically
         />
       ) : (
         <TouchableOpacity

@@ -1,5 +1,7 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
+import { deletePost } from "../lib/appwrite";
+import { icons } from "../constants";
 
 const PhotoCard = ({
   photo: {
@@ -29,7 +31,18 @@ const PhotoCard = ({
             {title}
           </Text>
         </View>
+
+        <View className="pt-2">
+          <TouchableOpacity>
+            <Image
+              source={icons.menu}
+              className="w-5 h-5"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
+
       <Image
         source={photo ? { uri: photo } : require("../assets/placeholder.png")}
         className="w-full h-60 rounded-xl mt-3"

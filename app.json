@@ -15,9 +15,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.jsm.future-craft"
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.jsm.future-craft"
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +40,12 @@
         {
           "supportsBackgroundPlayback": true,
           "supportsPictureInPicture": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],

@@ -19,15 +19,19 @@ import PhotoCard from "../../components/PhotoCard";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
-  const { data: latestPosts } = useAppwrite(getLatestPosts);
-  const { data: photos } = useAppwrite(getAllPhotoPosts);
+  const { data: posts, refetch: refetchPosts } = useAppwrite(() =>
+    getAllPosts(5)
+  );
+  const { data: latestPosts, refetch: refetchLatestPosts } =
+    useAppwrite(getLatestPosts);
+  const { data: photos, refetch: refetchPhotos } =
+    useAppwrite(getAllPhotoPosts);
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refetch();
+    await Promise.all([refetchPosts(), refetchLatestPosts(), refetchPhotos()]);
     setRefreshing(false);
   };
 
@@ -35,7 +39,9 @@ const Home = () => {
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
         <FlatList
-          data={[...(posts || []), ...(photos || [])]}
+          data={[...(posts || []), ...(photos || [])].sort(
+            (a, b) => new Date(b.$createdAt) - new Date(a.$createdAt)
+          )}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) =>
             item.video ? <VideoCard video={item} /> : <PhotoCard photo={item} />
@@ -63,7 +69,7 @@ const Home = () => {
 
               <SearchInput />
 
-              <View className="w-full flex-1 pt-5 pb-8">
+              <View className="w-full flex-1 pt-6 pb-8">
                 <Text className="text-gray-100 text-lg font-pregular mb-3">
                   Latest Videos
                 </Text>
