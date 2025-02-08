@@ -5,28 +5,28 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import SearchInput from "../../components/SearchInput";
 import EmptyState from "../../components/EmptyState";
-import { searchPosts } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
 import PhotoCard from "../../components/PhotoCard";
-import { useLocalSearchParams } from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { getLikedPosts } from "../../lib/appwrite";
 
 const Bookmark = () => {
-  const { query } = useLocalSearchParams();
-  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
-
-  useEffect(() => {
-    refetch();
-  }, [query]);
+  const { user } = useGlobalContext();
+  const { data: likedPosts } = useAppwrite(() => getLikedPosts(user.$id));
 
   return (
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
         <FlatList
-          data={posts}
+          data={likedPosts}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) =>
-            item.video ? <VideoCard video={item} /> : <PhotoCard photo={item} />
+            item.video ? (
+              <VideoCard video={item} user={user} />
+            ) : (
+              <PhotoCard photo={item} user={user} />
+            )
           }
           ListHeaderComponent={() => (
             <View className="my-6 px-4 pt-5">

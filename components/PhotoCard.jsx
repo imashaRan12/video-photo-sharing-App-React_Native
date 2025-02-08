@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { deletePhoto } from "../lib/appwrite";
 import { icons } from "../constants";
 
@@ -8,6 +8,7 @@ const PhotoCard = ({
   user,
   onDelete,
 }) => {
+  const [liked, setLiked] = useState(photo.likes?.includes(user.$id));
   // Handle delete confirmation
   const handleDelete = () => {
     Alert.alert(
@@ -33,6 +34,9 @@ const PhotoCard = ({
     );
   };
 
+  // Handle liked/saved videos
+  const handleLike = async () => {};
+
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-start">
@@ -55,16 +59,16 @@ const PhotoCard = ({
           </Text>
         </View>
 
-        {/* <View className="pt-2">
-          <TouchableOpacity onPress={handleDelete}>
+        <View className="pt-2 pr-5">
+          <TouchableOpacity onPress={handleLike}>
             <Image
-              source={icons.del}
-              className="w-6 h-6"
+              source={icons.like}
+              className="w-7 h-7"
               resizeMode="contain"
+              tintColor={liked ? "red" : "white"}
             />
           </TouchableOpacity>
-        </View> */}
-        {/* Show delete button only if the logged-in user is the creator */}
+        </View>
         {user?.$id === creator?.$id && (
           <View className="pt-2">
             <TouchableOpacity onPress={handleDelete}>

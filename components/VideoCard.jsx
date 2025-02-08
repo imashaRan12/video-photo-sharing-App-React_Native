@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { icons } from "../constants";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { deleteVideo } from "../lib/appwrite";
+import { toggleLikePost } from "../lib/appwrite";
 
 const VideoCard = ({
   video: { $id, title, thumbnail, video, creator },
@@ -15,6 +16,7 @@ const VideoCard = ({
     player.staysActiveInBackground = true;
     player.onEnd = () => setPlay(false);
   });
+  const [liked, setLiked] = useState(video.likes?.includes(user.$id));
 
   // Handle delete confirmation
   const handleDelete = () => {
@@ -41,6 +43,8 @@ const VideoCard = ({
     );
   };
 
+  // Handle liked/saved videos
+  const handleLike = async () => {};
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-star">
@@ -69,6 +73,16 @@ const VideoCard = ({
           </View>
         </View>
 
+        <View className="pt-2 pr-5">
+          <TouchableOpacity onPress={handleLike}>
+            <Image
+              source={icons.like}
+              className="w-7 h-7"
+              resizeMode="contain"
+              tintColor={liked ? "red" : "white"}
+            />
+          </TouchableOpacity>
+        </View>
         {user?.$id === creator?.$id && (
           <View className="pt-2">
             <TouchableOpacity onPress={handleDelete}>
@@ -118,5 +132,4 @@ const VideoCard = ({
     </View>
   );
 };
-
 export default VideoCard;
