@@ -31,6 +31,10 @@ const Profile = () => {
     setRefreshing(false);
   };
 
+  const setting = () => {
+    router.push("../edit/user");
+  };
+
   const logout = async () => {
     Alert.alert(
       "Logout Confirmation",
@@ -68,17 +72,25 @@ const Profile = () => {
           }
           ListHeaderComponent={() => (
             <View className="w-full justify-center items-center mt-6 mb-12 px-4">
-              <TouchableOpacity
-                className="w-full items-end mb-10"
-                onPress={logout}
-              >
-                <Image
-                  source={icons.logout}
-                  resizeMode="contain"
-                  className="w-7 h-7"
-                  tintColor="white"
-                />
-              </TouchableOpacity>
+              <View className="w-full flex-row justify-between mb-10">
+                <TouchableOpacity onPress={setting}>
+                  <Image
+                    source={icons.settings}
+                    resizeMode="contain"
+                    className="w-7 h-7"
+                    tintColor="white"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={logout}>
+                  <Image
+                    source={icons.logout}
+                    resizeMode="contain"
+                    className="w-7 h-7"
+                    tintColor="white"
+                  />
+                </TouchableOpacity>
+              </View>
 
               <View className="w-20 h-20 border border-secondary rounded-full justify-center items-center">
                 <Image

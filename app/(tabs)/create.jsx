@@ -78,7 +78,7 @@ const Create = () => {
   return (
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
-        <ScrollView className="px-4 my-6 w-full max-w-lg">
+        <ScrollView className="px-4 h-full my-6 w-full max-w-lg">
           <Text className="text-2xl text-white font-psemibold">
             Upload Video
           </Text>
@@ -157,7 +157,7 @@ const Create = () => {
           <CustomButton
             title="Submit & Publish"
             handlePress={submit}
-            containerStyles="mt-7"
+            containerStyles="mt-7 mb-12"
             isLoading={uploading}
           />
         </ScrollView>
