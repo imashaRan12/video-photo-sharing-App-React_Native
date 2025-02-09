@@ -104,7 +104,7 @@ Create a new project and Copy the Project ID (you will need it later).
 Create a new Database → Add Collections (Users, Video, Photo) and copy the collection IDs.
 In collection you need to create attributes in there.
 In lib folder there have variables and copy the previous IDs and paste for those matching variables.
-If you have no idea how to create and set up the database of appwrite watch this video<a href="https://youtu.be/ZBCUegTZF7M?si=ubt0vk70lSjt6DCs" target="_blank"><b> React Native Course for Beginners </b></a> from 01:29:10 timestamp.
+If you have no idea how to create and set up the database of appwrite watch this video<a href="https://youtu.be/YSUmzHH_OMg?si=ervP64teyI4y5aUW" target="_blank"><b> React Native Appwrite SDK - Getting started</b></a>.
 
 **Expo Go**
 
