@@ -16,6 +16,7 @@ import img from "../assets/icons/img.png";
 import del from "../assets/icons/delete.png";
 import settings from "../assets/icons/settings.png";
 import like from "../assets/icons/heart.png";
+import newsfeed from "../assets/icons/news.png";
 
 export default {
   play,
@@ -36,4 +37,5 @@ export default {
   del,
   settings,
   like,
+  newsfeed,
 };

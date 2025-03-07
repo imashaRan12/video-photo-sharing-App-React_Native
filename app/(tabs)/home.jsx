@@ -1,9 +1,15 @@
-import { View, Text, FlatList, Image, RefreshControl } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-
 import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
@@ -17,6 +23,8 @@ import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
 import PhotoCard from "../../components/PhotoCard";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { icons } from "../../constants";
+import { router } from "expo-router";
 
 const Home = () => {
   const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
@@ -31,6 +39,10 @@ const Home = () => {
     setRefreshing(true);
     await Promise.all([refetchPosts(), refetchLatestPosts(), refetchPhotos()]);
     setRefreshing(false);
+  };
+
+  const newsfeed = () => {
+    router.push("../newsfeed");
   };
 
   return (
@@ -85,6 +97,20 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
+
+        {/* Floating Button */}
+        <View className="absolute bottom-32 right-6 shadow-lg">
+          <TouchableOpacity
+            onPress={newsfeed} // Navigate to NewsFeed screen
+          >
+            <Image
+              source={icons.newsfeed}
+              className="w-12 h-12"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+
         <StatusBar style="light" />
       </SafeAreaView>
     </LinearGradient>
