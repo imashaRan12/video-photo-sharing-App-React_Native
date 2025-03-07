@@ -9,6 +9,7 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { router } from "expo-router";
+import { updateUser, updatePassword } from "../../lib/appwrite";
 
 const User = () => {
   const { user } = useGlobalContext();
@@ -19,7 +20,58 @@ const User = () => {
     oldPassword: "",
     newPassword: "",
   });
-  const submit = () => {};
+
+  const submit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      // console.log("User ID for update:", user?.$id); // Ensure this is correct
+      if (!user?.$id) {
+        Alert.alert("Error", "User document ID not found.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (
+        !form.username &&
+        !form.email &&
+        !form.oldPassword &&
+        !form.newPassword
+      ) {
+        Alert.alert("Error", "Please update at least one field.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Update only changed fields
+      await updateUser(
+        user.$id,
+        form.username || user.username,
+        form.email || user.email
+      );
+
+      //Validate and update password
+      if (form.oldPassword && form.newPassword) {
+        const passwordUpdated = await updatePassword(
+          form.oldPassword,
+          form.newPassword
+        );
+        if (!passwordUpdated) {
+          Alert.alert("Error", "Old password is incorrect.");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      Alert.alert("Success", "User details updated successfully.");
+      router.push("/profile"); // Redirect after update
+    } catch (error) {
+      Alert.alert("Update Failed", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <LinearGradient colors={["#140018", "#3d0148"]} start={{ x: 0.1, y: 0.9 }}>
       <SafeAreaView className="h-full">
@@ -59,14 +111,14 @@ const User = () => {
 
           <FormField
             title="Old Password"
-            value={form.password}
+            value={form.oldPassword}
             handleChangeText={(e) => setForm({ ...form, oldPassword: e })}
             otherStyles="mt-8"
           />
 
           <FormField
             title="New Password"
-            value={form.password}
+            value={form.newPassword}
             handleChangeText={(e) => setForm({ ...form, newPassword: e })}
             otherStyles="mt-8"
           />
